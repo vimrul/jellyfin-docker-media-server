@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+      - "8920:8920" # for HTTPS
+    environment:
+      - PUID=1000 # change this to your user id
+      - PGID=1000 # change this to your group id
+      - TZ=Asia/Dhaka # change this to your timezone
+    volumes:
+      - /path/to/config:/config
+      - /path/to/cache:/cache
+      - /path/to/media1:/media/movies
+      - /path/to/media2:/media/tv
+      - /path/to/media3:/media/music
+      - /path/to/media4:/media/photos
+      - /path/to/media5:/media/audiobooks
+
+networks:
+  default:
+    driver: bridge
+    # Optional - alternative address used for autodiscovery
+    environment:
+      - JELLYFIN_PublishedServerUrl=http://example.com
+    # Optional - may be necessary for docker healthcheck to pass if running in host network mode
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
